@@ -228,7 +228,7 @@ public class Main {
 
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("Error: " + e.getMessage());
                         }
                     }
                     break;
@@ -256,7 +256,7 @@ public class Main {
 
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage() + " Tente novamente.\n");
+                            System.out.println("Error: " + e.getMessage() + " Tente novamente.\n");
                         }
                     }
                     break;
@@ -276,7 +276,7 @@ public class Main {
                             }
                             break;
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Erro: " + e.getMessage());
+                            System.out.println("Error: " + e.getMessage());
                         }
 
                     }
@@ -297,8 +297,7 @@ public class Main {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm");
         String format = LocalDateTime.now().format(dateTimeFormatter);
 
-        String nomeCompleto = (nome + sobrenome).replaceAll("\\s+", "");
-        String nomeArquivo = String.format("%s-%s.txt", format, nomeCompleto).toUpperCase();
+        String nomeArquivo = String.format("%s-%s%s.txt", format, nome, sobrenome).toUpperCase();
 
         File respostas = new File(diretorio, nomeArquivo);
 
@@ -307,7 +306,7 @@ public class Main {
             fileWriter.write(listaDePets.toString());
 
         } catch (IOException e) {
-            System.err.println("Erro ao escrever no arquivo: " + e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -327,22 +326,22 @@ public class Main {
     }
 
     private static String[] lerArquivo() {
-        String caminho = "resources/formulario.txt";
+        String caminho = "C:\\Users\\User\\ws-IntelliJ\\sistema-de-cadastros\\src\\formulario.txt";
+        int quantLinhas = 7;
 
-        String[] linhas = new String[7];
-        try (FileReader fileReader = new FileReader(caminho);
-             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+        String[] linhas = new String[quantLinhas];
+        try (FileReader fileReader = new FileReader(caminho); BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
             int i = 0;
             String linha;
 
-            while (((linha = bufferedReader.readLine()) != null)) {
+            while (((linha = bufferedReader.readLine()) != null) && (i < quantLinhas)) {
 
                 linhas[i] = linha;
                 i++;
             }
         } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo." + e.getMessage());
+            e.printStackTrace();
         }
         return linhas;
     }
@@ -398,11 +397,10 @@ public class Main {
                 String linha;
                 int j = 0;
 
-                while ((linha = leitor.readLine()) != null) {
-                    String[] partes = linha.split(" - ");
+                while ((linha = leitor.readLine()) != null && j < 7) {
+                    String[] partes = linha.split(" - ", 2);
                     if (partes.length == 2) {
-                        dados[j] = partes[1].trim();
-                        j++;
+                        dados[j++] = partes[1].trim();
                     }
                 }
 
@@ -786,7 +784,7 @@ public class Main {
             break; // sai do while(true) principal após listar os pets encontrados
         }
 
-        int escolha;
+        int escolha = -1;
         while (true) {
             System.out.println("Digite o número do Pet que deseja deletar");
 
